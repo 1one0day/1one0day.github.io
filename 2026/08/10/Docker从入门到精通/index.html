@@ -1,0 +1,529 @@
+<!DOCTYPE html><html lang="zh-CN" data-theme="light"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1.0,viewport-fit=cover"><title>Docker从入门到精通 | 1one0day的博客</title><meta name="author" content="1one0day"><meta name="copyright" content="1one0day"><meta name="format-detection" content="telephone=no"><meta name="theme-color" content="#ffffff"><meta name="description" content="Docker从入门到精通一、缘起：这世上的容器我向来是不惮以最坏的恶意,来推测中国人的软件部署的。然而我还不料,也不信竟会繁复到这等地步。 在我所见过的大大小小的机房里,大抵是这样一副光景:一套程序,从开发的手里交出来,先要到测试的机器上跑——自然是跑不起来的;于是请来运维的同事,装环境,配依赖,改端口,直闹到天明。好容易跑通了,再搬到线上的服务器,却又是一遍同样的折腾。这套程序,在开发那里活得好">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Docker从入门到精通">
+<meta property="og:url" content="http://1one0day.github.io/2026/08/10/Docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/index.html">
+<meta property="og:site_name" content="1one0day的博客">
+<meta property="og:description" content="Docker从入门到精通一、缘起：这世上的容器我向来是不惮以最坏的恶意,来推测中国人的软件部署的。然而我还不料,也不信竟会繁复到这等地步。 在我所见过的大大小小的机房里,大抵是这样一副光景:一套程序,从开发的手里交出来,先要到测试的机器上跑——自然是跑不起来的;于是请来运维的同事,装环境,配依赖,改端口,直闹到天明。好容易跑通了,再搬到线上的服务器,却又是一遍同样的折腾。这套程序,在开发那里活得好">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://avatars.githubusercontent.com/u/138416337?s=400&u=0cbed7841c89f030c1b67a31ac7b78bd205445e8&v=4">
+<meta property="article:published_time" content="2026-08-10T07:00:00.000Z">
+<meta property="article:modified_time" content="2026-08-10T01:51:30.850Z">
+<meta property="article:author" content="1one0day">
+<meta property="article:tag" content="Docker">
+<meta property="article:tag" content="容器">
+<meta property="article:tag" content="云原生">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://avatars.githubusercontent.com/u/138416337?s=400&u=0cbed7841c89f030c1b67a31ac7b78bd205445e8&v=4"><link rel="shortcut icon" href="/img/favicon.png"><link rel="canonical" href="http://1one0day.github.io/2026/08/10/Docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/index.html"><link rel="preconnect" href="//cdnjs.cloudflare.com"/><link rel="preconnect" href="//busuanzi.ibruce.info"/><link rel="stylesheet" href="/css/index.css"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"><script>const GLOBAL_CONFIG = {
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"/search.xml","preload":true,"top_n_per_article":1,"unescape":false,"languages":{"hits_empty":"找不到您查询的内容：${query}","hits_stats":"共找到 ${hits} 篇文章"}},
+  translate: undefined,
+  noticeOutdate: undefined,
+  highlight: {"plugin":"highlight.js","highlightCopy":true,"highlightLang":true,"highlightHeightLimit":230},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  },
+  relativeDate: {
+    homepage: true,
+    post: false
+  },
+  runtime: '天',
+  dateSuffix: {
+    just: '刚刚',
+    min: '分钟前',
+    hour: '小时前',
+    day: '天前',
+    month: '个月前'
+  },
+  copyright: undefined,
+  lightbox: 'mediumZoom',
+  Snackbar: undefined,
+  infinitegrid: {
+    js: 'https://cdnjs.cloudflare.com/ajax/libs/egjs-infinitegrid/4.11.1/infinitegrid.min.js',
+    buttonText: '加载更多'
+  },
+  isPhotoFigcaption: false,
+  islazyload: false,
+  isAnchor: false,
+  percent: {
+    toc: true,
+    rightside: false,
+  },
+  autoDarkmode: false
+}</script><script id="config-diff">var GLOBAL_CONFIG_SITE = {
+  title: 'Docker从入门到精通',
+  isPost: true,
+  isHome: false,
+  isHighlightShrink: false,
+  isToc: true,
+  postUpdate: '2026-08-10 09:51:30'
+}</script><script>(win=>{
+      win.saveToLocal = {
+        set: (key, value, ttl) => {
+          if (ttl === 0) return
+          const now = Date.now()
+          const expiry = now + ttl * 86400000
+          const item = {
+            value,
+            expiry
+          }
+          localStorage.setItem(key, JSON.stringify(item))
+        },
+      
+        get: key => {
+          const itemStr = localStorage.getItem(key)
+      
+          if (!itemStr) {
+            return undefined
+          }
+          const item = JSON.parse(itemStr)
+          const now = Date.now()
+      
+          if (now > item.expiry) {
+            localStorage.removeItem(key)
+            return undefined
+          }
+          return item.value
+        }
+      }
+    
+      win.getScript = (url, attr = {}) => new Promise((resolve, reject) => {
+        const script = document.createElement('script')
+        script.src = url
+        script.async = true
+        script.onerror = reject
+        script.onload = script.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          script.onload = script.onreadystatechange = null
+          resolve()
+        }
+
+        Object.keys(attr).forEach(key => {
+          script.setAttribute(key, attr[key])
+        })
+
+        document.head.appendChild(script)
+      })
+    
+      win.getCSS = (url, id = false) => new Promise((resolve, reject) => {
+        const link = document.createElement('link')
+        link.rel = 'stylesheet'
+        link.href = url
+        if (id) link.id = id
+        link.onerror = reject
+        link.onload = link.onreadystatechange = function() {
+          const loadState = this.readyState
+          if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+          link.onload = link.onreadystatechange = null
+          resolve()
+        }
+        document.head.appendChild(link)
+      })
+    
+      win.activateDarkMode = () => {
+        document.documentElement.setAttribute('data-theme', 'dark')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#0d0d0d')
+        }
+      }
+      win.activateLightMode = () => {
+        document.documentElement.setAttribute('data-theme', 'light')
+        if (document.querySelector('meta[name="theme-color"]') !== null) {
+          document.querySelector('meta[name="theme-color"]').setAttribute('content', '#ffffff')
+        }
+      }
+      const t = saveToLocal.get('theme')
+    
+        if (t === 'dark') activateDarkMode()
+        else if (t === 'light') activateLightMode()
+      
+      const asideStatus = saveToLocal.get('aside-status')
+      if (asideStatus !== undefined) {
+        if (asideStatus === 'hide') {
+          document.documentElement.classList.add('hide-aside')
+        } else {
+          document.documentElement.classList.remove('hide-aside')
+        }
+      }
+    
+      const detectApple = () => {
+        if(/iPad|iPhone|iPod|Macintosh/.test(navigator.userAgent)){
+          document.documentElement.classList.add('apple')
+        }
+      }
+      detectApple()
+    })(window)</script><meta name="referrer" content="no-referrer"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome/css/font-awesome.min.css"><link rel="stylesheet" href="/css/universe.css"><link rel="stylesheet" href="/css/custom.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="/css/progress_bar.css" media="defer" onload="this.media='all'"><link rel="stylesheet" href="/css/rightmenu.css"><link rel="stylesheet" href="/css/iconfont.css"><svg aria-hidden="true" style="position:absolute; overflow:hidden; width:0; height:0"><symbol id="icon-sun" viewBox="0 0 1024 1024"><path d="M960 512l-128 128v192h-192l-128 128-128-128H192v-192l-128-128 128-128V192h192l128-128 128 128h192v192z" fill="#FFD878" p-id="8420"></path><path d="M736 512a224 224 0 1 0-448 0 224 224 0 1 0 448 0z" fill="#FFE4A9" p-id="8421"></path><path d="M512 109.248L626.752 224H800v173.248L914.752 512 800 626.752V800h-173.248L512 914.752 397.248 800H224v-173.248L109.248 512 224 397.248V224h173.248L512 109.248M512 64l-128 128H192v192l-128 128 128 128v192h192l128 128 128-128h192v-192l128-128-128-128V192h-192l-128-128z" fill="#4D5152" p-id="8422"></path><path d="M512 320c105.888 0 192 86.112 192 192s-86.112 192-192 192-192-86.112-192-192 86.112-192 192-192m0-32a224 224 0 1 0 0 448 224 224 0 0 0 0-448z" fill="#4D5152" p-id="8423"></path></symbol><symbol id="icon-moon" viewBox="0 0 1024 1024"><path d="M611.370667 167.082667a445.013333 445.013333 0 0 1-38.4 161.834666 477.824 477.824 0 0 1-244.736 244.394667 445.141333 445.141333 0 0 1-161.109334 38.058667 85.077333 85.077333 0 0 0-65.066666 135.722666A462.08 462.08 0 1 0 747.093333 102.058667a85.077333 85.077333 0 0 0-135.722666 65.024z" fill="#FFB531" p-id="11345"></path><path d="M329.728 274.133333l35.157333-35.157333a21.333333 21.333333 0 1 0-30.165333-30.165333l-35.157333 35.157333-35.114667-35.157333a21.333333 21.333333 0 0 0-30.165333 30.165333l35.114666 35.157333-35.114666 35.157334a21.333333 21.333333 0 1 0 30.165333 30.165333l35.114667-35.157333 35.157333 35.157333a21.333333 21.333333 0 1 0 30.165333-30.165333z" fill="#030835" p-id="11346"></path></symbol></svg><script src="/live2d-widget/autoload.js"></script><!-- hexo injector head_end start --><link rel="stylesheet" href="https://npm.elemecdn.com/hexo-butterfly-footer-beautify@1.0.0/lib/runtime.css" media="print" onload="this.media='all'"><!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.0.0"><link rel="alternate" href="/atom.xml" title="1one0day的博客" type="application/atom+xml">
+</head><body><script>window.paceOptions = {
+  restartOnPushState: false
+}
+
+document.addEventListener('pjax:send', () => {
+  Pace.restart()
+})
+</script><link rel="stylesheet" href="/css/progress_bar.css"/><script src="https://cdnjs.cloudflare.com/ajax/libs/pace/1.2.4/pace.min.js"></script><div id="web_bg"></div><div id="sidebar"><div id="menu-mask"></div><div id="sidebar-menus"><div class="avatar-img is-center"><img src="https://avatars.githubusercontent.com/u/138416337?s=400&amp;u=0cbed7841c89f030c1b67a31ac7b78bd205445e8&amp;v=4" onerror="onerror=null;src='/img/friend_404.gif'" alt="avatar"/></div><div class="sidebar-site-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><hr class="custom-hr"/><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 小游戏</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-comment"></i><span> 留言板</span></a></div></div></div></div><div class="post" id="body-wrap"><header class="post-bg" id="page-header"><nav id="nav"><span id="blog-info"><a href="/" title="1one0day的博客"><span class="site-name">1one0day的博客</span></a></span><div id="menus"><div id="search-button"><a class="site-page social-icon search" href="javascript:void(0);"><i class="fas fa-search fa-fw"></i><span> 搜索</span></a></div><div class="menus_items"><div class="menus_item"><a class="site-page" href="/"><i class="fa-fw fas fa-home"></i><span> 主页</span></a></div><div class="menus_item"><a class="site-page" href="/archives/"><i class="fa-fw fas fa-archive"></i><span> 时间轴</span></a></div><div class="menus_item"><a class="site-page" href="/categories/"><i class="fa-fw fas fa-folder-open"></i><span> 分类</span></a></div><div class="menus_item"><a class="site-page group" href="javascript:void(0);"><i class="fa-fw fas fa-list"></i><span> 清单</span><i class="fas fa-chevron-down"></i></a><ul class="menus_item_child"><li><a class="site-page child" href="/music/"><i class="fa-fw fas fa-music"></i><span> 音乐</span></a></li><li><a class="site-page child" href="/movies/"><i class="fa-fw fas fa-video"></i><span> 电影</span></a></li><li><a class="site-page child" href="/games/"><i class="fa-fw fas fa-gamepad"></i><span> 小游戏</span></a></li></ul></div><div class="menus_item"><a class="site-page" href="/link/"><i class="fa-fw fas fa-link"></i><span> 友链</span></a></div><div class="menus_item"><a class="site-page" href="/about/"><i class="fa-fw fas fa-heart"></i><span> 关于</span></a></div><div class="menus_item"><a class="site-page" href="/comments/"><i class="fa-fw fas fa-comment"></i><span> 留言板</span></a></div></div><div id="toggle-menu"><a class="site-page" href="javascript:void(0);"><i class="fas fa-bars fa-fw"></i></a></div></div></nav><div id="post-info"><h1 class="post-title">Docker从入门到精通</h1><div id="post-meta"><div class="meta-firstline"><span class="post-meta-date"><i class="far fa-calendar-alt fa-fw post-meta-icon"></i><span class="post-meta-label">发表于</span><time class="post-meta-date-created" datetime="2026-08-10T07:00:00.000Z" title="发表于 2026-08-10 15:00:00">2026-08-10</time><span class="post-meta-separator">|</span><i class="fas fa-history fa-fw post-meta-icon"></i><span class="post-meta-label">更新于</span><time class="post-meta-date-updated" datetime="2026-08-10T01:51:30.850Z" title="更新于 2026-08-10 09:51:30">2026-08-10</time></span><span class="post-meta-categories"><span class="post-meta-separator">|</span><i class="fas fa-inbox fa-fw post-meta-icon"></i><a class="post-meta-categories" href="/categories/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a></span></div><div class="meta-secondline"><span class="post-meta-separator">|</span><span class="post-meta-wordcount"><i class="far fa-file-word fa-fw post-meta-icon"></i><span class="post-meta-label">字数总计:</span><span class="word-count">4218</span><span class="post-meta-separator">|</span><i class="far fa-clock fa-fw post-meta-icon"></i><span class="post-meta-label">阅读时长:</span><span>15分钟</span></span><span class="post-meta-separator">|</span><span class="post-meta-pv-cv" id="" data-flag-title="Docker从入门到精通"><i class="far fa-eye fa-fw post-meta-icon"></i><span class="post-meta-label">阅读量:</span><span id="busuanzi_value_page_pv"><i class="fa-solid fa-spinner fa-spin"></i></span></span></div></div></div><section class="main-hero-waves-area waves-area"><svg class="waves-svg" xmlns="http://www.w3.org/2000/svg" xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto"><defs><path id="gentle-wave" d="M -160 44 c 30 0 58 -18 88 -18 s 58 18 88 18 s 58 -18 88 -18 s 58 18 88 18 v 44 h -352 Z"></path></defs><g class="parallax"><use href="#gentle-wave" x="48" y="0"></use><use href="#gentle-wave" x="48" y="3"></use><use href="#gentle-wave" x="48" y="5"></use><use href="#gentle-wave" x="48" y="7"></use></g></svg></section></header><main class="layout" id="content-inner"><div id="post"><article class="post-content" id="article-container"><h1 id="Docker从入门到精通"><a href="#Docker从入门到精通" class="headerlink" title="Docker从入门到精通"></a>Docker从入门到精通</h1><h2 id="一、缘起：这世上的容器"><a href="#一、缘起：这世上的容器" class="headerlink" title="一、缘起：这世上的容器"></a>一、缘起：这世上的容器</h2><p>我向来是不惮以最坏的恶意,来推测中国人的软件部署的。然而我还不料,也不信竟会繁复到这等地步。</p>
+<p>在我所见过的大大小小的机房里,大抵是这样一副光景:一套程序,从开发的手里交出来,先要到测试的机器上跑——自然是跑不起来的;于是请来运维的同事,装环境,配依赖,改端口,直闹到天明。好容易跑通了,再搬到线上的服务器,却又是一遍同样的折腾。这套程序,在开发那里活得好好的,到了别处,竟像水土不服一般,非要折腾个半死。</p>
+<p>这便是所谓”在我的机器上能跑”的千古名言了。</p>
+<p>后来听说有一样东西,叫 Docker。它说:何不把程序和它赖以活着的一切——代码、库、环境、配置——统统装进一只箱子,锁好,贴上封条,然后连箱子一起搬走呢?到了哪里,箱子一开,里头的程序依旧活蹦乱跳,全然不知自己已经换了人间。</p>
+<p>这主意,听来倒颇有几分道理。于是我便动了研究的心思。</p>
+<h2 id="二、容器与虚拟机-两条路"><a href="#二、容器与虚拟机-两条路" class="headerlink" title="二、容器与虚拟机:两条路"></a>二、容器与虚拟机:两条路</h2><p>世间原本是有虚拟机的。它老实,却笨重——每造一台,必得连同一整个操作系统都搬进去,活像一个人出远门,非要把自家的房子、地基、连同脚下的泥土都打包带走不可。这样走路,自然是快的不了。启动一台虚拟机,往往要等上几分钟,其间人可以泡一壶茶,再发一阵呆。</p>
+<p>容器却另走了一条路。它识得大家脚下的土地原是同一片,便只管把自己的营生带走,地皮是借宿主的。如此一来,身轻如燕,启动不过几秒钟的事。一台上百个容器,也跑得动。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">虚拟机:连房带地一起搬             容器:只带营生,地皮借宿主</span><br><span class="line">┌─────────┐                      ┌───────┐</span><br><span class="line">│  应用    │                      │  应用  │</span><br><span class="line">│  依赖    │                      │  依赖  │</span><br><span class="line">│  客户OS  │                      └───────┘</span><br><span class="line">│  虚拟化层 │              应用  应用  应用</span><br><span class="line">└─────────┘               ┌───容器引擎───┐</span><br><span class="line">                          │   宿主OS      │</span><br><span class="line">                          └──────────────┘</span><br><span class="line">笨重,启动慢(分钟级)         轻盈,启动快(秒级)</span><br></pre></td></tr></table></figure>
+
+<p>有人说,容器是轻量级的虚拟机。这话似是而非。虚拟机是另起炉灶,容器是同锅吃饭。一个隔得绝,一个隔得透,其间分寸,用过的人自然明白。</p>
+<h2 id="三、几个名词-先要弄清"><a href="#三、几个名词-先要弄清" class="headerlink" title="三、几个名词,先要弄清"></a>三、几个名词,先要弄清</h2><p>学一样手艺,最怕的是满纸的行话,弄得人云里雾里。Docker 里头,真正要紧的名词,其实也就那么几个。</p>
+<p><strong>镜像(Image)</strong> ——这是死的。一张只读的模板,里头封着程序和它全部的家当。镜像自己不会跑,正如照片里的人不会走路。</p>
+<p><strong>容器(Container)</strong> ——这是活的。把镜像一启动,便成了容器。容器会跑,会停,会死,也会再拉起来。同一段程序,从一个镜像里,可以变出无数个容器来,正如同一张底片,可以洗出许多照片。</p>
+<p><strong>仓库(Repository)</strong> ——存放镜像的地方。最出名的是 Docker Hub,大抵相当于镜像的当铺,什么货色都有,任人取用。</p>
+<p><strong>Dockerfile</strong> ——一张配方,用文字写明这镜像该怎么一层层地搭起来。</p>
+<p><strong>数据卷(Volume)</strong> ——容器是朝生暮死的东西,一删便什么都没了。数据卷却是独立的,容器死了,它还活着。这是给程序留的一条后路。</p>
+<h2 id="四、安装-开工之前"><a href="#四、安装-开工之前" class="headerlink" title="四、安装:开工之前"></a>四、安装:开工之前</h2><p>工欲善其事,必先利其器。Docker 在 Linux 上跑得最是自在。</p>
+<h3 id="Linux-Ubuntu-Debian"><a href="#Linux-Ubuntu-Debian" class="headerlink" title="Linux(Ubuntu&#x2F;Debian)"></a>Linux(Ubuntu&#x2F;Debian)</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 先把旧的、残的、来路不明的卸干净</span></span><br><span class="line">sudo apt-get remove docker docker-engine docker.io containerd runc</span><br><span class="line"></span><br><span class="line"><span class="comment"># 装些必需的家伙</span></span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install -y ca-certificates curl gnupg lsb-release</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加上 Docker 官方的钥匙和仓库</span></span><br><span class="line">sudo <span class="built_in">mkdir</span> -p /etc/apt/keyrings</span><br><span class="line">curl -fsSL https://download.docker.com/linux/ubuntu/gpg | \</span><br><span class="line">  sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> \</span><br><span class="line">  <span class="string">&quot;deb [arch=<span class="subst">$(dpkg --print-architecture)</span> signed-by=/etc/apt/keyrings/docker.gpg] \</span></span><br><span class="line"><span class="string">  https://download.docker.com/linux/ubuntu <span class="subst">$(lsb_release -cs)</span> stable&quot;</span> | \</span><br><span class="line">  sudo <span class="built_in">tee</span> /etc/apt/sources.list.d/docker.list &gt; /dev/null</span><br><span class="line"></span><br><span class="line"><span class="comment"># 这才装上正主</span></span><br><span class="line">sudo apt-get update</span><br><span class="line">sudo apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin</span><br></pre></td></tr></table></figure>
+
+<p>国内的网络,拉镜像常常拉不动。这事不必恼,加个加速器便是:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">sudo <span class="built_in">mkdir</span> -p /etc/docker</span><br><span class="line">sudo <span class="built_in">tee</span> /etc/docker/daemon.json &lt;&lt;-<span class="string">&#x27;EOF&#x27;</span></span><br><span class="line">&#123;</span><br><span class="line">  <span class="string">&quot;registry-mirrors&quot;</span>: [</span><br><span class="line">    <span class="string">&quot;https://docker.m.daocloud.io&quot;</span>,</span><br><span class="line">    <span class="string">&quot;https://dockerproxy.com&quot;</span></span><br><span class="line">  ]</span><br><span class="line">&#125;</span><br><span class="line">EOF</span><br><span class="line"></span><br><span class="line">sudo systemctl daemon-reload</span><br><span class="line">sudo systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+<p>装好了,试一试:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run hello-world</span><br></pre></td></tr></table></figure>
+
+<p>若屏幕上跳出一段客客气气的英文,恭喜你,这箱子算是通了气了。</p>
+<p>Windows 和 Mac 的朋友,下个 Docker Desktop,装上点开便是。Windows 记得开 WSL2,否则它要闹脾气。</p>
+<h2 id="五、常用命令-熟能生巧"><a href="#五、常用命令-熟能生巧" class="headerlink" title="五、常用命令:熟能生巧"></a>五、常用命令:熟能生巧</h2><p>Docker 的命令,乍看眼花缭乱,用熟了也不过尔尔。我在这里列一份清单,以备查阅。</p>
+<h3 id="镜像"><a href="#镜像" class="headerlink" title="镜像"></a>镜像</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">docker images                     <span class="comment"># 列出本地镜像</span></span><br><span class="line">docker search nginx               <span class="comment"># 到 Docker Hub 上寻一寻</span></span><br><span class="line">docker pull nginx:1.25            <span class="comment"># 拉一个下来</span></span><br><span class="line">docker rmi nginx:1.25             <span class="comment"># 不要了,删掉</span></span><br><span class="line">docker image prune -a             <span class="comment"># 清扫无用的镜像</span></span><br><span class="line">docker tag nginx:1.25 mynginx:v1  <span class="comment"># 改个名,贴个标签</span></span><br><span class="line">docker save -o nginx.tar nginx:1.25  <span class="comment"># 打包带走</span></span><br><span class="line">docker load -i nginx.tar          <span class="comment"># 解包装回</span></span><br><span class="line">docker <span class="built_in">history</span> nginx:1.25         <span class="comment"># 看这镜像是怎么一层层堆起来的</span></span><br><span class="line">docker inspect nginx:1.25         <span class="comment"># 看它的根底</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="容器"><a href="#容器" class="headerlink" title="容器"></a>容器</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 新起一个容器</span></span><br><span class="line">docker run -d --name web \</span><br><span class="line">  -p 8080:80 \</span><br><span class="line">  -v /data/html:/usr/share/nginx/html \</span><br><span class="line">  --restart=always \</span><br><span class="line">  nginx:1.25</span><br><span class="line"></span><br><span class="line"><span class="comment"># 几个要紧的参数:</span></span><br><span class="line"><span class="comment"># -d             后台跑,不占着终端</span></span><br><span class="line"><span class="comment"># --name         给它起个名字,免得 Docker 自己瞎起</span></span><br><span class="line"><span class="comment"># -p 宿主:容器    端口打通</span></span><br><span class="line"><span class="comment"># -v 宿主:容器    目录挂上</span></span><br><span class="line"><span class="comment"># -e KEY=VALUE   传个环境变量进去</span></span><br><span class="line"><span class="comment"># --restart=always  死了就拉起来</span></span><br><span class="line"><span class="comment"># -it            交互式,常用来钻进容器</span></span><br><span class="line"></span><br><span class="line">docker ps                    <span class="comment"># 看哪些还活着</span></span><br><span class="line">docker ps -a                 <span class="comment"># 连死掉的也看看</span></span><br><span class="line">docker start web             <span class="comment"># 启动</span></span><br><span class="line">docker stop web              <span class="comment"># 停止</span></span><br><span class="line">docker restart web           <span class="comment"># 重启</span></span><br><span class="line">docker <span class="built_in">kill</span> web              <span class="comment"># 直接打死</span></span><br><span class="line">docker <span class="built_in">rm</span> web                <span class="comment"># 删掉(得先停)</span></span><br><span class="line">docker <span class="built_in">rm</span> -f $(docker ps -aq)  <span class="comment"># 一锅端,全删</span></span><br><span class="line"></span><br><span class="line">docker <span class="built_in">exec</span> -it web bash     <span class="comment"># 钻进容器里看看(推荐)</span></span><br><span class="line">docker attach web            <span class="comment"># 也进得去,但退出时容器会跟着停,不甚好用</span></span><br><span class="line"></span><br><span class="line">docker logs -f --<span class="built_in">tail</span> 100 web   <span class="comment"># 看它说些什么,实时跟最后100行</span></span><br><span class="line"></span><br><span class="line">docker <span class="built_in">cp</span> web:/etc/nginx/nginx.conf ./   <span class="comment"># 从容器里往外掏</span></span><br><span class="line">docker <span class="built_in">cp</span> ./app.conf web:/etc/nginx/conf.d/  <span class="comment"># 往容器里塞</span></span><br><span class="line"></span><br><span class="line">docker stats                 <span class="comment"># 看各家占了多少 CPU、内存</span></span><br><span class="line">docker top web               <span class="comment"># 看容器里有几个进程</span></span><br><span class="line">docker inspect web           <span class="comment"># 看底细</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="系统"><a href="#系统" class="headerlink" title="系统"></a>系统</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker system <span class="built_in">df</span>            <span class="comment"># 看磁盘占了多少</span></span><br><span class="line">docker system prune -a      <span class="comment"># 大扫除,无用的全清</span></span><br><span class="line">docker info                 <span class="comment"># 看整体情况</span></span><br></pre></td></tr></table></figure>
+
+<p>命令多,不必死记。用得着的时候翻一翻,三五次后自然就记住了。世上原没有记熟的命令,敲得多了,也便成了肌肉记忆。</p>
+<h2 id="六、Dockerfile-造一张镜像的方子"><a href="#六、Dockerfile-造一张镜像的方子" class="headerlink" title="六、Dockerfile:造一张镜像的方子"></a>六、Dockerfile:造一张镜像的方子</h2><p>Dockerfile 是一张方子,一行一行,交代清楚这镜像该怎么造。每写一行 RUN,便是往上叠一层。层叠得多了,镜像便臃肿,所以能合并的,还是合并了好。</p>
+<h3 id="常用指令"><a href="#常用指令" class="headerlink" title="常用指令"></a>常用指令</h3><table>
+<thead>
+<tr>
+<th>指令</th>
+<th>说些什么</th>
+</tr>
+</thead>
+<tbody><tr>
+<td><code>FROM</code></td>
+<td>从哪个基础镜像起头,必是第一条</td>
+</tr>
+<tr>
+<td><code>LABEL</code></td>
+<td>贴个标签,写明作者之类</td>
+</tr>
+<tr>
+<td><code>RUN</code></td>
+<td>造的时候执行一条命令</td>
+</tr>
+<tr>
+<td><code>CMD</code></td>
+<td>容器起头时默认干的事,可被覆盖</td>
+</tr>
+<tr>
+<td><code>ENTRYPOINT</code></td>
+<td>容器起头时干的事,不大容易被覆盖</td>
+</tr>
+<tr>
+<td><code>EXPOSE</code></td>
+<td>声明要开的端口</td>
+</tr>
+<tr>
+<td><code>ENV</code></td>
+<td>设环境变量</td>
+</tr>
+<tr>
+<td><code>COPY</code></td>
+<td>把宿主的文件抄进镜像</td>
+</tr>
+<tr>
+<td><code>ADD</code></td>
+<td>同 COPY,但能自动解 tar,也容易出乱子</td>
+</tr>
+<tr>
+<td><code>VOLUME</code></td>
+<td>声明一处放数据的地方</td>
+</tr>
+<tr>
+<td><code>WORKDIR</code></td>
+<td>设个工作目录</td>
+</tr>
+<tr>
+<td><code>USER</code></td>
+<td>指定以哪个用户来跑</td>
+</tr>
+<tr>
+<td><code>HEALTHCHECK</code></td>
+<td>定期查一查它还活着没有</td>
+</tr>
+</tbody></table>
+<h3 id="CMD-与-ENTRYPOINT-的纠葛"><a href="#CMD-与-ENTRYPOINT-的纠葛" class="headerlink" title="CMD 与 ENTRYPOINT 的纠葛"></a>CMD 与 ENTRYPOINT 的纠葛</h3><p>这两个,初学的人最容易搅浑。说白了:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">CMD         ——容器起头要干啥。你在 docker run 后头加参数,整个 CMD 就被替掉了。</span><br><span class="line">ENTRYPOINT  ——容器起头的入口。你加的参数,是凑到它后头当尾巴使的。</span><br><span class="line"></span><br><span class="line">两个搭着用,最是妥当:</span><br><span class="line">ENTRYPOINT [&quot;nginx&quot;]</span><br><span class="line">CMD [&quot;-g&quot;, &quot;daemon off;&quot;]</span><br><span class="line"></span><br><span class="line">→ docker run mynginx            → nginx -g &quot;daemon off;&quot;</span><br><span class="line">→ docker run mynginx -t         → nginx -t</span><br></pre></td></tr></table></figure>
+
+<h3 id="实例-造一个-SpringBoot-的镜像"><a href="#实例-造一个-SpringBoot-的镜像" class="headerlink" title="实例:造一个 SpringBoot 的镜像"></a>实例:造一个 SpringBoot 的镜像</h3><p>我见过许多人,造 Java 镜像时把整套 Maven 和 JDK 都塞进去,一个镜像动辄七八百兆。这其实不必。编译归编译,运行归运行,分作两段,便是所谓”多阶段构建”:</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 第一段:只管编译</span></span><br><span class="line"><span class="keyword">FROM</span> maven:<span class="number">3.9</span>-eclipse-temurin-<span class="number">17</span> AS builder</span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /build</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> pom.xml .</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> mvn dependency:go-offline            <span class="comment"># 先把依赖下全,后头好省时间</span></span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> src ./src</span></span><br><span class="line"><span class="keyword">RUN</span><span class="language-bash"> mvn clean package -DskipTests</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 第二段:只管运行,带着编译好的 jar 便走</span></span><br><span class="line"><span class="keyword">FROM</span> eclipse-temurin:<span class="number">17</span>-jre</span><br><span class="line"><span class="keyword">WORKDIR</span><span class="language-bash"> /app</span></span><br><span class="line"><span class="keyword">COPY</span><span class="language-bash"> --from=builder /build/target/*.jar app.jar</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">8080</span></span><br><span class="line"><span class="keyword">ENV</span> TZ=Asia/Shanghai \</span><br><span class="line">    JAVA_OPTS=<span class="string">&quot;-Xms256m -Xmx512m&quot;</span></span><br><span class="line"><span class="keyword">ENTRYPOINT</span><span class="language-bash"> [<span class="string">&quot;sh&quot;</span>, <span class="string">&quot;-c&quot;</span>, <span class="string">&quot;java <span class="variable">$JAVA_OPTS</span> -jar app.jar&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker build -t myapp:1.0 .</span><br><span class="line">docker run -d --name app -p 8080:8080 myapp:1.0</span><br></pre></td></tr></table></figure>
+
+<h3 id="造镜像的几条规矩"><a href="#造镜像的几条规矩" class="headerlink" title="造镜像的几条规矩"></a>造镜像的几条规矩</h3><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">1. 基础镜像挑小号的:alpine、slim、distroless</span><br><span class="line">2. RUN 能合就合,层数越少越好</span><br><span class="line">3. 不常变的写在前面(比如下依赖),好叫 Docker 复用缓存</span><br><span class="line">4. 配一个 .dockerignore,把不相干的文件挡在外头</span><br><span class="line">5. 密码、密钥万勿写进镜像</span><br><span class="line">6. 用多阶段构建,给镜像减负</span><br><span class="line">7. 别用 root 跑,造个普通用户来用</span><br><span class="line">8. tag 写死版本号,不要图省事用 latest——latest 其实是最不靠谱的</span><br></pre></td></tr></table></figure>
+
+<h2 id="七、数据-给程序留条后路"><a href="#七、数据-给程序留条后路" class="headerlink" title="七、数据:给程序留条后路"></a>七、数据:给程序留条后路</h2><p>容器这东西,天性凉薄。你今日删了它,明日再起一个,里头的文件早已荡然无存。所以但凡要紧的数据,总得另找个稳妥的去处。</p>
+<h3 id="数据卷-Volume-——-最是省心"><a href="#数据卷-Volume-——-最是省心" class="headerlink" title="数据卷(Volume)—— 最是省心"></a>数据卷(Volume)—— 最是省心</h3><p>由 Docker 替你管,存在它自家地方,容器死活与它无干。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker volume create mydata</span><br><span class="line">docker run -d --name db -v mydata:/var/lib/mysql mysql:8</span><br></pre></td></tr></table></figure>
+
+<h3 id="绑定挂载-Bind-Mount-——-直接些"><a href="#绑定挂载-Bind-Mount-——-直接些" class="headerlink" title="绑定挂载(Bind Mount)—— 直接些"></a>绑定挂载(Bind Mount)—— 直接些</h3><p>把宿主机的一个目录,直愣愣地挂进容器。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name web \</span><br><span class="line">  -p 80:80 \</span><br><span class="line">  -v /opt/nginx/html:/usr/share/nginx/html:ro \</span><br><span class="line">  nginx:1.25</span><br><span class="line"><span class="comment"># :ro 是只读,容器里头改不得</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="tmpfs-——-过眼云烟"><a href="#tmpfs-——-过眼云烟" class="headerlink" title="tmpfs —— 过眼云烟"></a>tmpfs —— 过眼云烟</h3><p>存在内存里,容器一停便没了。适合放些不想落盘的临时物事。</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name cache --tmpfs /cache redis:7</span><br></pre></td></tr></table></figure>
+
+<p>三种法子,各有所长:Volume 稳妥易迁,bind mount 直接却易有路径的牵绊,tmpfs 快却不长久。看场合挑用便是。</p>
+<h2 id="八、网络-让它们彼此说得上话"><a href="#八、网络-让它们彼此说得上话" class="headerlink" title="八、网络:让它们彼此说得上话"></a>八、网络:让它们彼此说得上话</h2><p>容器一多,便有了彼此往来的问题。Docker 自带几种网络,最常用的是 bridge。</p>
+<ul>
+<li><strong>bridge</strong>:默认的桥,容器间靠虚拟网桥通气。</li>
+<li><strong>host</strong>:容器直接用宿主的网络,不分彼此(也便少了隔离)。</li>
+<li><strong>none</strong>:与世隔绝。</li>
+<li><strong>overlay</strong>:跨主机连络,Swarm 集群里用。</li>
+<li><strong>macvlan</strong>:给容器一个正经的物理 MAC 地址。</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">docker network <span class="built_in">ls</span>                      <span class="comment"># 看有哪些网络</span></span><br><span class="line">docker network create mynet            <span class="comment"># 自己建一个</span></span><br><span class="line">docker network inspect mynet           <span class="comment"># 看根底</span></span><br><span class="line">docker network connect mynet web       <span class="comment"># 把活着的容器拉进来</span></span><br><span class="line">docker network <span class="built_in">rm</span> mynet                <span class="comment"># 删</span></span><br></pre></td></tr></table></figure>
+
+<p>这里头有一桩要紧的事:默认的 bridge,容器之间只能靠 IP 寻人;而自己建的 bridge 网络,却可以用容器名相唤,仿佛有了名姓一般。所以多容器往来,总该自建一个网络:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">docker network create app-net</span><br><span class="line"></span><br><span class="line">docker run -d --name db --network app-net -e MYSQL_ROOT_PASSWORD=123456 mysql:8</span><br><span class="line">docker run -d --name web --network app-net -p 8080:80 nginx:1.25</span><br><span class="line"></span><br><span class="line"><span class="comment"># web 里头,可以直接唤 db 的名字</span></span><br><span class="line">docker <span class="built_in">exec</span> web ping db</span><br></pre></td></tr></table></figure>
+
+<h2 id="九、Docker-Compose-一干人等的总调度"><a href="#九、Docker-Compose-一干人等的总调度" class="headerlink" title="九、Docker Compose:一干人等的总调度"></a>九、Docker Compose:一干人等的总调度</h2><p>一个应用,常常不是孤零零一个容器,而是三五成群——数据库一个,缓存一个,应用一个。一个个 <code>docker run</code> 敲下去,既啰嗦又易错。于是有了 Compose:把这一干人等,都写进一个 YAML 文件里,一令既出,齐齐起立。</p>
+<p>新版 Docker 已自带 compose 插件,直接 <code>docker compose</code> 便是。</p>
+<h3 id="常用命令"><a href="#常用命令" class="headerlink" title="常用命令"></a>常用命令</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">docker compose up -d              <span class="comment"># 后台一齐启动</span></span><br><span class="line">docker compose up -d --build      <span class="comment"># 重新造镜像再起</span></span><br><span class="line">docker compose down               <span class="comment"># 一齐散了(连容器带网络)</span></span><br><span class="line">docker compose down -v            <span class="comment"># 连数据卷也一并端掉</span></span><br><span class="line">docker compose ps                 <span class="comment"># 看各家状态</span></span><br><span class="line">docker compose logs -f web        <span class="comment"># 听某家说话</span></span><br><span class="line">docker compose restart web        <span class="comment"># 叫某家重启</span></span><br><span class="line">docker compose <span class="built_in">exec</span> web bash      <span class="comment"># 钻进某家</span></span><br><span class="line">docker compose stop               <span class="comment"># 都停下(不删)</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="一例-搭一套-WordPress"><a href="#一例-搭一套-WordPress" class="headerlink" title="一例:搭一套 WordPress"></a>一例:搭一套 WordPress</h3><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">version:</span> <span class="string">&quot;3.8&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="attr">services:</span></span><br><span class="line">  <span class="attr">db:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">mysql:8.0</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">wp-db</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">MYSQL_ROOT_PASSWORD:</span> <span class="string">rootpass</span></span><br><span class="line">      <span class="attr">MYSQL_DATABASE:</span> <span class="string">wordpress</span></span><br><span class="line">      <span class="attr">MYSQL_USER:</span> <span class="string">wp</span></span><br><span class="line">      <span class="attr">MYSQL_PASSWORD:</span> <span class="string">wppass</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">db_data:/var/lib/mysql</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">wp-net</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">wordpress:</span></span><br><span class="line">    <span class="attr">image:</span> <span class="string">wordpress:6.4-php8.2-apache</span></span><br><span class="line">    <span class="attr">container_name:</span> <span class="string">wp-web</span></span><br><span class="line">    <span class="attr">restart:</span> <span class="string">always</span></span><br><span class="line">    <span class="attr">depends_on:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">db</span></span><br><span class="line">    <span class="attr">ports:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">&quot;8080:80&quot;</span></span><br><span class="line">    <span class="attr">environment:</span></span><br><span class="line">      <span class="attr">WORDPRESS_DB_HOST:</span> <span class="string">db:3306</span></span><br><span class="line">      <span class="attr">WORDPRESS_DB_USER:</span> <span class="string">wp</span></span><br><span class="line">      <span class="attr">WORDPRESS_DB_PASSWORD:</span> <span class="string">wppass</span></span><br><span class="line">      <span class="attr">WORDPRESS_DB_NAME:</span> <span class="string">wordpress</span></span><br><span class="line">    <span class="attr">volumes:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">wp_data:/var/www/html</span></span><br><span class="line">    <span class="attr">networks:</span></span><br><span class="line">      <span class="bullet">-</span> <span class="string">wp-net</span></span><br><span class="line"></span><br><span class="line"><span class="attr">volumes:</span></span><br><span class="line">  <span class="attr">db_data:</span></span><br><span class="line">  <span class="attr">wp_data:</span></span><br><span class="line"></span><br><span class="line"><span class="attr">networks:</span></span><br><span class="line">  <span class="attr">wp-net:</span></span><br><span class="line">    <span class="attr">driver:</span> <span class="string">bridge</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker compose up -d</span><br></pre></td></tr></table></figure>
+
+<p>这一纸文书,便把数据库与网页两家的关系、端口、密码、卷、网络,都交代得明明白白。日后换台机器,带着这文件同去,顷刻便能复起一套。</p>
+<h2 id="十、私有仓库-自家的当铺"><a href="#十、私有仓库-自家的当铺" class="headerlink" title="十、私有仓库:自家的当铺"></a>十、私有仓库:自家的当铺</h2><p>公家的 Docker Hub 固然方便,有时却不甚合用——慢,或有不能外传的镜像。这时便该开一家自家的当铺:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -p 5000:5000 --name registry \</span><br><span class="line">  -v /opt/registry:/var/lib/registry \</span><br><span class="line">  --restart=always \</span><br><span class="line">  registry:2</span><br></pre></td></tr></table></figure>
+
+<p>往里头存东西,先得改个名,前缀写上仓库的地址:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">docker tag nginx:1.25 127.0.0.1:5000/nginx:1.25</span><br><span class="line">docker push 127.0.0.1:5000/nginx:1.25</span><br><span class="line">docker pull 127.0.0.1:5000/nginx:1.25</span><br></pre></td></tr></table></figure>
+
+<p>若是非 HTTPS 的地址,Docker 不肯信,得在 <code>/etc/docker/daemon.json</code> 里说一声:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;insecure-registries&quot;</span><span class="punctuation">:</span> <span class="punctuation">[</span><span class="string">&quot;192.168.1.100:5000&quot;</span><span class="punctuation">]</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后重启 Docker,它便认了。</p>
+<h2 id="十一、安全与运维-几分警惕"><a href="#十一、安全与运维-几分警惕" class="headerlink" title="十一、安全与运维:几分警惕"></a>十一、安全与运维:几分警惕</h2><p>容器虽轻便,却也不是全无隐患。我以为有几条,是断断不可大意的:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">1. 莫用 root 跑容器,造个普通用户来用</span><br><span class="line">2. 限定它吃的 CPU 与内存,免得一个容器发了疯,连累整台机器</span><br><span class="line">3. 削去它不该有的权限:</span><br><span class="line">   --read-only                  文件系统只读</span><br><span class="line">   --cap-drop=ALL               先把权全夺了</span><br><span class="line">   --cap-add=NET_BIND_SERVICE   再按需添一点</span><br><span class="line">   --security-opt=no-new-privileges  禁止提权</span><br><span class="line">   --pids-limit 100             限制进程数</span><br><span class="line">4. 密钥万勿写死在镜像里</span><br><span class="line">5. 常拿 trivy、docker scout 之类扫一扫漏洞</span><br><span class="line">6. 基础镜像挑最小的,有漏洞也好补</span><br><span class="line">7. 基础镜像记得常更新</span><br></pre></td></tr></table></figure>
+
+<p>限制资源一例:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name web \</span><br><span class="line">  --cpus=<span class="string">&quot;1.5&quot;</span> \</span><br><span class="line">  --memory=<span class="string">&quot;512m&quot;</span> \</span><br><span class="line">  --memory-swap=<span class="string">&quot;1g&quot;</span> \</span><br><span class="line">  --pids-limit 200 \</span><br><span class="line">  --restart=on-failure:3 \</span><br><span class="line">  --read-only \</span><br><span class="line">  --tmpfs /tmp \</span><br><span class="line">  nginx:1.25</span><br></pre></td></tr></table></figure>
+
+<p>日志若不管,日积月累,能撑爆磁盘。在 <code>/etc/docker/daemon.json</code> 里限一限:</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span></span><br><span class="line">  <span class="attr">&quot;log-driver&quot;</span><span class="punctuation">:</span> <span class="string">&quot;json-file&quot;</span><span class="punctuation">,</span></span><br><span class="line">  <span class="attr">&quot;log-opts&quot;</span><span class="punctuation">:</span> <span class="punctuation">&#123;</span></span><br><span class="line">    <span class="attr">&quot;max-size&quot;</span><span class="punctuation">:</span> <span class="string">&quot;10m&quot;</span><span class="punctuation">,</span></span><br><span class="line">    <span class="attr">&quot;max-file&quot;</span><span class="punctuation">:</span> <span class="string">&quot;3&quot;</span></span><br><span class="line">  <span class="punctuation">&#125;</span></span><br><span class="line"><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="常见的疑难杂症"><a href="#常见的疑难杂症" class="headerlink" title="常见的疑难杂症"></a>常见的疑难杂症</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 容器一起就退</span></span><br><span class="line">docker logs &lt;容器&gt;            <span class="comment"># 看它临终说了什么</span></span><br><span class="line"><span class="comment"># 多半是 CMD 的命令一执行完便退了,前头没有挡住的进程</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 端口起不来</span></span><br><span class="line">netstat -tlnp | grep :80     <span class="comment"># 查是谁占了</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 容器连不上网</span></span><br><span class="line">docker network inspect bridge</span><br><span class="line">sysctl net.ipv4.ip_forward   <span class="comment"># 该是 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 磁盘满了</span></span><br><span class="line">docker system <span class="built_in">df</span>             <span class="comment"># 看谁占的</span></span><br><span class="line">docker system prune -a       <span class="comment"># 大扫除</span></span><br><span class="line">docker builder prune -a      <span class="comment"># 清构建缓存</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 想改已死容器的文件</span></span><br><span class="line">docker <span class="built_in">cp</span> &lt;容器&gt;:/path /host/path   <span class="comment"># 掏出来改了再塞回去</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 删不掉的容器或镜像</span></span><br><span class="line">docker <span class="built_in">rm</span> -f &lt;容器&gt;</span><br><span class="line"><span class="comment"># 还不动,便重启 Docker</span></span><br><span class="line">systemctl restart docker</span><br></pre></td></tr></table></figure>
+
+<h2 id="十二、Swarm-一群的事"><a href="#十二、Swarm-一群的事" class="headerlink" title="十二、Swarm:一群的事"></a>十二、Swarm:一群的事</h2><p>若一台机器不够使,便要集群。Docker 自家有个 Swarm,虽不及 Kubernetes 那般显赫,却也够许多场合用了。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 立一个头领</span></span><br><span class="line">docker swarm init --advertise-addr 192.168.1.10</span><br><span class="line"></span><br><span class="line"><span class="comment"># 领入伙的口令</span></span><br><span class="line">docker swarm join-token worker</span><br><span class="line"></span><br><span class="line"><span class="comment"># 在别的机器上照着念</span></span><br><span class="line">docker swarm <span class="built_in">join</span> --token &lt;token&gt; 192.168.1.10:2377</span><br><span class="line"></span><br><span class="line"><span class="comment"># 看有几家</span></span><br><span class="line">docker node <span class="built_in">ls</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 派一个活,要三份</span></span><br><span class="line">docker service create --replicas 3 --name web -p 80:80 nginx:1.25</span><br><span class="line"></span><br><span class="line"><span class="comment"># 看</span></span><br><span class="line">docker service <span class="built_in">ls</span></span><br><span class="line">docker service ps web</span><br><span class="line"></span><br><span class="line"><span class="comment"># 加到五份</span></span><br><span class="line">docker service scale web=5</span><br><span class="line"></span><br><span class="line"><span class="comment"># 换个新版本,滚动着换</span></span><br><span class="line">docker service update --image nginx:1.26 web</span><br><span class="line"></span><br><span class="line"><span class="comment"># 散了</span></span><br><span class="line">docker service <span class="built_in">rm</span> web</span><br></pre></td></tr></table></figure>
+
+<h2 id="十三、速查表"><a href="#十三、速查表" class="headerlink" title="十三、速查表"></a>十三、速查表</h2><p>列一张表,放在手边,用时翻一翻:</p>
+<table>
+<thead>
+<tr>
+<th>要做什么</th>
+<th>念这句</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>拉镜像</td>
+<td><code>docker pull nginx</code></td>
+</tr>
+<tr>
+<td>看镜像</td>
+<td><code>docker images</code></td>
+</tr>
+<tr>
+<td>跑容器</td>
+<td><code>docker run -d --name web -p 80:80 nginx</code></td>
+</tr>
+<tr>
+<td>看容器</td>
+<td><code>docker ps</code> &#x2F; <code>docker ps -a</code></td>
+</tr>
+<tr>
+<td>进容器</td>
+<td><code>docker exec -it web bash</code></td>
+</tr>
+<tr>
+<td>看日志</td>
+<td><code>docker logs -f web</code></td>
+</tr>
+<tr>
+<td>停</td>
+<td><code>docker stop web</code></td>
+</tr>
+<tr>
+<td>删容器</td>
+<td><code>docker rm web</code></td>
+</tr>
+<tr>
+<td>删镜像</td>
+<td><code>docker rmi nginx</code></td>
+</tr>
+<tr>
+<td>造镜像</td>
+<td><code>docker build -t myapp:1.0 .</code></td>
+</tr>
+<tr>
+<td>看占用</td>
+<td><code>docker stats</code></td>
+</tr>
+<tr>
+<td>大扫除</td>
+<td><code>docker system prune -a</code></td>
+</tr>
+<tr>
+<td>Compose 起</td>
+<td><code>docker compose up -d</code></td>
+</tr>
+<tr>
+<td>Compose 停</td>
+<td><code>docker compose down</code></td>
+</tr>
+</tbody></table>
+<h2 id="结尾的话"><a href="#结尾的话" class="headerlink" title="结尾的话"></a>结尾的话</h2><p>Docker 的根本道理,无非是”造一次,到处跑”这六个字。要紧的几样,翻来覆去也就是:镜像、容器、仓库、数据卷、网络;再会写 Dockerfile,会用 Compose,知道怎么加固、怎么排错,便已足以应付日常的大半。</p>
+<p>世上本没有精通,用得多了,踩的坑多了,也就通了。</p>
+<p>至于再往前的 Kubernetes,那是另一片天地。然而有了 Docker 作底子,走进去时,脚下总归是稳当些的。</p>
+<p>参考的所在:</p>
+<ul>
+<li>官方文档:<a target="_blank" rel="noopener" href="https://docs.docker.com/">https://docs.docker.com</a></li>
+<li>Docker Hub:<a target="_blank" rel="noopener" href="https://hub.docker.com/">https://hub.docker.com</a></li>
+<li>Compose 规范:<a target="_blank" rel="noopener" href="https://docs.docker.com/compose/compose-file">https://docs.docker.com/compose/compose-file</a></li>
+</ul>
+</article><div class="post-copyright"><div class="post-copyright__title"><span class="post-copyright-info"><h>Docker从入门到精通</h></span></div><div class="post-copyright__type"><span class="post-copyright-info"><a href="http://1one0day.github.io/2026/08/10/Docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/">http://1one0day.github.io/2026/08/10/Docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/</a></span></div><div class="post-copyright-m"><div class="post-copyright-m-info"><div class="post-copyright-a"><h>作者</h><div class="post-copyright-cc-info"><h>1one0day</h></div></div><div class="post-copyright-c"><h>发布于</h><div class="post-copyright-cc-info"><h>2026-08-10</h></div></div><div class="post-copyright-u"><h>更新于</h><div class="post-copyright-cc-info"><h>2026-08-10</h></div></div><div class="post-copyright-c"><h>许可协议</h><div class="post-copyright-cc-info"><a class="icon" rel="noopener" target="_blank" title="Creative Commons" href="https://creativecommons.org/"><i class="fab fa-creative-commons"></i></a><a rel="noopener" target="_blank" title="CC BY-NC-SA 4.0" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a></div></div></div></div></div><div class="tag_share"><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Docker/">Docker</a><a class="post-meta__tags" href="/tags/%E5%AE%B9%E5%99%A8/">容器</a><a class="post-meta__tags" href="/tags/%E4%BA%91%E5%8E%9F%E7%94%9F/">云原生</a></div><div class="post_share"><div class="social-share" data-image="https://avatars.githubusercontent.com/u/138416337?s=400&amp;u=0cbed7841c89f030c1b67a31ac7b78bd205445e8&amp;v=4" data-sites="facebook,twitter,wechat,weibo,qq"></div><link rel="stylesheet" href="https://lib.baomitu.com/social-share.js/1.0.16/css/share.min.css" media="print" onload="this.media='all'"><script src="https://lib.baomitu.com/social-share.js/1.0.16/js/social-share.min.js" defer></script></div></div><nav class="pagination-post" id="pagination"><div class="prev-post pull-left"><a href="/2026/08/10/Kubernetes%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/" title="Kubernetes从入门到精通"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">上一篇</div><div class="prev_info">Kubernetes从入门到精通</div></div></a></div><div class="next-post pull-right"><a href="/2026/02/09/%E5%B0%8F%E9%BB%91%E5%AD%90%E9%9C%B2%E5%87%BA%E9%B8%A1%E8%84%9A%E4%BA%86%E5%90%A7/" title="暗藏玄坤"><div class="cover" style="background: var(--default-bg-color)"></div><div class="pagination-info"><div class="label">下一篇</div><div class="next_info">暗藏玄坤</div></div></a></div></nav><div class="relatedPosts"><div class="headline"><i class="fas fa-thumbs-up fa-fw"></i><span>相关推荐</span></div><div class="relatedPosts-list"><div><a href="/2026/08/10/Kubernetes%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/" title="Kubernetes从入门到精通"><div class="cover" style="background: var(--default-bg-color)"></div><div class="content is-center"><div class="date"><i class="far fa-calendar-alt fa-fw"></i> 2026-08-10</div><div class="title">Kubernetes从入门到精通</div></div></a></div></div></div><hr class="custom-hr"/><div id="post-comment"><div class="comment-head"><div class="comment-headline"><i class="fas fa-comments fa-fw"></i><span> 评论</span></div></div><div class="comment-wrap"><div><div class="vcomment" id="vcomment"></div></div></div></div></div><div class="aside-content" id="aside-content"><div class="card-widget card-info"><div class="author_top is-center"><div class="card-info-avatar"><div class="avatar-img"><img src="https://avatars.githubusercontent.com/u/138416337?s=400&amp;u=0cbed7841c89f030c1b67a31ac7b78bd205445e8&amp;v=4" onerror="this.onerror=null;this.src='/img/friend_404.gif'" alt="avatar"/></div><div class="author-info__name">1one0day</div><div class="author-info__description">每年考一证，坚持十年！</div></div></div><div class="card-info-data site-data is-center"><a href="/archives/"><div class="headline">文章</div><div class="length-num">9</div></a><a href="/tags/"><div class="headline">标签</div><div class="length-num">8</div></a><a href="/categories/"><div class="headline">分类</div><div class="length-num">4</div></a></div><a id="card-info-btn" target="_blank" rel="noopener" href="https://github.com/1one0day"><i class="fab fa-github"></i><span>Follow Me</span></a><div class="card-info-social-icons is-center"><a class="social-icon" href="https://github.com/1one0day" target="_blank" title="Github"><i class="fab fa-github"></i></a><a class="social-icon" href="mailto:875539651@qq.com" target="_blank" title="Email"><i class="fas fa-envelope"></i></a></div></div><div class="card-widget card-announcement"><div class="item-headline"><i class="fas fa-bullhorn fa-shake"></i><span>公告</span></div><div class="announcement_content">This is my Blog</div></div><div class="sticky_layout"><div class="card-widget" id="card-toc"><div class="item-headline"><i class="fas fa-stream"></i><span>目录</span><span class="toc-percentage"></span></div><div class="toc-content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A"><span class="toc-number">1.</span> <span class="toc-text">Docker从入门到精通</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%80%E3%80%81%E7%BC%98%E8%B5%B7%EF%BC%9A%E8%BF%99%E4%B8%96%E4%B8%8A%E7%9A%84%E5%AE%B9%E5%99%A8"><span class="toc-number">1.1.</span> <span class="toc-text">一、缘起：这世上的容器</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8C%E3%80%81%E5%AE%B9%E5%99%A8%E4%B8%8E%E8%99%9A%E6%8B%9F%E6%9C%BA-%E4%B8%A4%E6%9D%A1%E8%B7%AF"><span class="toc-number">1.2.</span> <span class="toc-text">二、容器与虚拟机:两条路</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%89%E3%80%81%E5%87%A0%E4%B8%AA%E5%90%8D%E8%AF%8D-%E5%85%88%E8%A6%81%E5%BC%84%E6%B8%85"><span class="toc-number">1.3.</span> <span class="toc-text">三、几个名词,先要弄清</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9B%E3%80%81%E5%AE%89%E8%A3%85-%E5%BC%80%E5%B7%A5%E4%B9%8B%E5%89%8D"><span class="toc-number">1.4.</span> <span class="toc-text">四、安装:开工之前</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Linux-Ubuntu-Debian"><span class="toc-number">1.4.1.</span> <span class="toc-text">Linux(Ubuntu&#x2F;Debian)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%94%E3%80%81%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4-%E7%86%9F%E8%83%BD%E7%94%9F%E5%B7%A7"><span class="toc-number">1.5.</span> <span class="toc-text">五、常用命令:熟能生巧</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%95%9C%E5%83%8F"><span class="toc-number">1.5.1.</span> <span class="toc-text">镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%B9%E5%99%A8"><span class="toc-number">1.5.2.</span> <span class="toc-text">容器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%B3%BB%E7%BB%9F"><span class="toc-number">1.5.3.</span> <span class="toc-text">系统</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AD%E3%80%81Dockerfile-%E9%80%A0%E4%B8%80%E5%BC%A0%E9%95%9C%E5%83%8F%E7%9A%84%E6%96%B9%E5%AD%90"><span class="toc-number">1.6.</span> <span class="toc-text">六、Dockerfile:造一张镜像的方子</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E6%8C%87%E4%BB%A4"><span class="toc-number">1.6.1.</span> <span class="toc-text">常用指令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#CMD-%E4%B8%8E-ENTRYPOINT-%E7%9A%84%E7%BA%A0%E8%91%9B"><span class="toc-number">1.6.2.</span> <span class="toc-text">CMD 与 ENTRYPOINT 的纠葛</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9E%E4%BE%8B-%E9%80%A0%E4%B8%80%E4%B8%AA-SpringBoot-%E7%9A%84%E9%95%9C%E5%83%8F"><span class="toc-number">1.6.3.</span> <span class="toc-text">实例:造一个 SpringBoot 的镜像</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%A0%E9%95%9C%E5%83%8F%E7%9A%84%E5%87%A0%E6%9D%A1%E8%A7%84%E7%9F%A9"><span class="toc-number">1.6.4.</span> <span class="toc-text">造镜像的几条规矩</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%83%E3%80%81%E6%95%B0%E6%8D%AE-%E7%BB%99%E7%A8%8B%E5%BA%8F%E7%95%99%E6%9D%A1%E5%90%8E%E8%B7%AF"><span class="toc-number">1.7.</span> <span class="toc-text">七、数据:给程序留条后路</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%95%B0%E6%8D%AE%E5%8D%B7-Volume-%E2%80%94%E2%80%94-%E6%9C%80%E6%98%AF%E7%9C%81%E5%BF%83"><span class="toc-number">1.7.1.</span> <span class="toc-text">数据卷(Volume)—— 最是省心</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E7%BB%91%E5%AE%9A%E6%8C%82%E8%BD%BD-Bind-Mount-%E2%80%94%E2%80%94-%E7%9B%B4%E6%8E%A5%E4%BA%9B"><span class="toc-number">1.7.2.</span> <span class="toc-text">绑定挂载(Bind Mount)—— 直接些</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#tmpfs-%E2%80%94%E2%80%94-%E8%BF%87%E7%9C%BC%E4%BA%91%E7%83%9F"><span class="toc-number">1.7.3.</span> <span class="toc-text">tmpfs —— 过眼云烟</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%85%AB%E3%80%81%E7%BD%91%E7%BB%9C-%E8%AE%A9%E5%AE%83%E4%BB%AC%E5%BD%BC%E6%AD%A4%E8%AF%B4%E5%BE%97%E4%B8%8A%E8%AF%9D"><span class="toc-number">1.8.</span> <span class="toc-text">八、网络:让它们彼此说得上话</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B9%9D%E3%80%81Docker-Compose-%E4%B8%80%E5%B9%B2%E4%BA%BA%E7%AD%89%E7%9A%84%E6%80%BB%E8%B0%83%E5%BA%A6"><span class="toc-number">1.9.</span> <span class="toc-text">九、Docker Compose:一干人等的总调度</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="toc-number">1.9.1.</span> <span class="toc-text">常用命令</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%B8%80%E4%BE%8B-%E6%90%AD%E4%B8%80%E5%A5%97-WordPress"><span class="toc-number">1.9.2.</span> <span class="toc-text">一例:搭一套 WordPress</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E3%80%81%E7%A7%81%E6%9C%89%E4%BB%93%E5%BA%93-%E8%87%AA%E5%AE%B6%E7%9A%84%E5%BD%93%E9%93%BA"><span class="toc-number">1.10.</span> <span class="toc-text">十、私有仓库:自家的当铺</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E4%B8%80%E3%80%81%E5%AE%89%E5%85%A8%E4%B8%8E%E8%BF%90%E7%BB%B4-%E5%87%A0%E5%88%86%E8%AD%A6%E6%83%95"><span class="toc-number">1.11.</span> <span class="toc-text">十一、安全与运维:几分警惕</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B8%B8%E8%A7%81%E7%9A%84%E7%96%91%E9%9A%BE%E6%9D%82%E7%97%87"><span class="toc-number">1.11.1.</span> <span class="toc-text">常见的疑难杂症</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E4%BA%8C%E3%80%81Swarm-%E4%B8%80%E7%BE%A4%E7%9A%84%E4%BA%8B"><span class="toc-number">1.12.</span> <span class="toc-text">十二、Swarm:一群的事</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%8D%81%E4%B8%89%E3%80%81%E9%80%9F%E6%9F%A5%E8%A1%A8"><span class="toc-number">1.13.</span> <span class="toc-text">十三、速查表</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%BB%93%E5%B0%BE%E7%9A%84%E8%AF%9D"><span class="toc-number">1.14.</span> <span class="toc-text">结尾的话</span></a></li></ol></li></ol></div></div><div class="card-widget card-recent-post"><div class="item-headline"><i class="fas fa-history"></i><span>最新文章</span></div><div class="aside-list"><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/10/Kubernetes%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/" title="Kubernetes从入门到精通">Kubernetes从入门到精通</a><time datetime="2026-08-10T08:00:00.000Z" title="发表于 2026-08-10 16:00:00">2026-08-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/08/10/Docker%E4%BB%8E%E5%85%A5%E9%97%A8%E5%88%B0%E7%B2%BE%E9%80%9A/" title="Docker从入门到精通">Docker从入门到精通</a><time datetime="2026-08-10T07:00:00.000Z" title="发表于 2026-08-10 15:00:00">2026-08-10</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/09/%E5%B0%8F%E9%BB%91%E5%AD%90%E9%9C%B2%E5%87%BA%E9%B8%A1%E8%84%9A%E4%BA%86%E5%90%A7/" title="暗藏玄坤">暗藏玄坤</a><time datetime="2026-02-09T08:39:33.317Z" title="发表于 2026-02-09 16:39:33">2026-02-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/09/%E5%88%86%E4%BA%AB%E4%B8%80%E7%AF%87%E7%BA%A2%E9%98%9F%E9%9D%A2%E7%BB%8F/" title="分享一篇红队面经">分享一篇红队面经</a><time datetime="2026-02-09T08:39:32.252Z" title="发表于 2026-02-09 16:39:32">2026-02-09</time></div></div><div class="aside-list-item no-cover"><div class="content"><a class="title" href="/2026/02/09/%E4%B8%AA%E4%BA%BACKA%E8%AF%81%E4%B9%A6/" title="个人CKA证书">个人CKA证书</a><time datetime="2026-02-09T08:39:27.086Z" title="发表于 2026-02-09 16:39:27">2026-02-09</time></div></div></div></div></div></div></main><footer id="footer"><div id="footer-wrap"><div class="copyright">&copy;2020 - 2026 By 1one0day</div><div class="framework-info"><span>框架 </span><a target="_blank" rel="noopener" href="https://hexo.io">Hexo</a><span class="footer-separator">|</span><span>主题 </span><a target="_blank" rel="noopener" href="https://github.com/jerryc127/hexo-theme-butterfly">Butterfly</a></div></div></footer></div><div id="rightside"><div id="rightside-config-hide"><button id="readmode" type="button" title="阅读模式"><i class="fas fa-book-open"></i></button><a class="icon-V hidden" onclick="switchNightMode()" title="浅色和深色模式转换"><svg width="25" height="25" viewBox="0 0 1024 1024"><use id="modeicon" xlink:href="#icon-moon"></use></svg></a><button id="hide-aside-btn" type="button" title="单栏和双栏切换"><i class="fas fa-arrows-alt-h"></i></button></div><div id="rightside-config-show"><button id="rightside-config" type="button" title="设置"><i class="fas fa-cog fa-spin"></i></button><button class="close" id="mobile-toc-button" type="button" title="目录"><i class="fas fa-list-ul"></i></button><a id="to_comment" href="#post-comment" title="直达评论"><i class="fas fa-comments"></i></a><button id="go-up" type="button" title="回到顶部"><span class="scroll-percent"></span><i class="fas fa-arrow-up"></i></button></div></div><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div><div class="js-pjax" id="rightMenu"><div class="rightMenu-group rightMenu-small"><a class="rightMenu-item" href="javascript:window.history.back();"><i class="fa fa-arrow-left"></i></a><a class="rightMenu-item" href="javascript:window.history.forward();"><i class="fa fa-arrow-right"></i></a><a class="rightMenu-item" href="javascript:window.location.reload();"><i class="fa fa-refresh"></i></a><a class="rightMenu-item" href="javascript:rmf.scrollToTop();"><i class="fa fa-arrow-up"></i></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-text"><a class="rightMenu-item" href="javascript:rmf.copySelect();"><i class="fa fa-copy"></i><span>复制</span></a><a class="rightMenu-item" href="javascript:window.open(&quot;https://www.baidu.com/s?wd=&quot;+window.getSelection().toString());window.location.reload();"><i class="fa fa-search"></i><span>百度搜索</span></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-too"><a class="rightMenu-item" href="javascript:window.open(window.getSelection().toString());window.location.reload();"><i class="fa fa-link"></i><span>转到链接</span></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-paste"><a class="rightMenu-item" href="javascript:rmf.paste()"><i class="fa fa-copy"></i><span>粘贴</span></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-post"><a class="rightMenu-item" href="#post-comment"><i class="fas fa-comment"></i><span>空降评论</span></a><a class="rightMenu-item" href="javascript:rmf.copyWordsLink()"><i class="fa fa-link"></i><span>复制本文地址</span></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-to"><a class="rightMenu-item" href="javascript:rmf.openWithNewTab()"><i class="fa fa-window-restore"></i><span>新窗口打开</span></a><a class="rightMenu-item" id="menu-too" href="javascript:rmf.open()"><i class="fa fa-link"></i><span>转到链接</span></a><a class="rightMenu-item" href="javascript:rmf.copyLink()"><i class="fa fa-copy"></i><span>复制链接</span></a></div><div class="rightMenu-group rightMenu-line hide" id="menu-img"><a class="rightMenu-item" href="javascript:rmf.saveAs()"><i class="fa fa-download"></i><span>保存图片</span></a><a class="rightMenu-item" href="javascript:rmf.openWithNewTab()"><i class="fa fa-window-restore"></i><span>在新窗口打开</span></a><a class="rightMenu-item" href="javascript:rmf.copyLink()"><i class="fa fa-copy"></i><span>复制图片链接</span></a></div><div class="rightMenu-group rightMenu-line"><a class="rightMenu-item" href="javascript:switchNightMode();"><i class="fa fa-moon"></i><span>昼夜切换</span></a><a class="rightMenu-item" href="javascript:rmf.switchReadMode();"><i class="fa fa-book"></i><span>阅读模式</span></a><a class="rightMenu-item" href="/personal/about/"><i class="fa fa-info-circle"></i><span>关于博客</span></a><a class="rightMenu-item" href="javascript:rmf.fullScreen();"><i class="fas fa-expand"></i><span>切换全屏</span></a><a class="rightMenu-item" href="javascript:window.print();"><i class="fa-solid fa-print"></i><span>打印页面</span></a></div></div><div><script src="/js/utils.js"></script><script src="/js/main.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/medium-zoom/1.1.0/medium-zoom.min.js"></script><div class="js-pjax"><script>(() => {
+  const initValine = () => {
+    const valine = new Valine(Object.assign({
+      el: '#vcomment',
+      appId: 'JbsWFc0Cw9INHAeo0CIkEJxr-gzGzoHsz',
+      appKey: 'qBMFX8UsWXDnBJj2fGJYdNxN',
+      avatar: 'monsterid',
+      serverURLs: '',
+      emojiMaps: "",
+      path: window.location.pathname,
+      visitor: false
+    }, null))
+  }
+
+  const loadValine = async () => {
+    if (typeof Valine === 'function') initValine()
+    else {
+      await getScript('/js/Valine.min.js')
+      initValine()
+    }
+  }
+
+  if ('Valine' === 'Valine' || !false) {
+    if (false) btf.loadComment(document.getElementById('vcomment'),loadValine)
+    else setTimeout(loadValine, 0)
+  } else {
+    window.loadOtherComment = loadValine
+  }
+})()</script></div><canvas id="universe"></canvas><script async src="/js/universe.js"></script><script async src="/js/cursor.js"></script><script async src="/js/sun_moon.js" async></script><canvas id="snow"></canvas><script async src="/js/snow.js"></script><script type="text/javascript" src="https://npm.elemecdn.com/jquery@latest/dist/jquery.min.js"></script><script type="text/javascript" async src="/js/rightmenu.js"></script><script id="click-heart" src="https://cdnjs.cloudflare.com/ajax/libs/butterfly-extsrc/1.1.3/click-heart.min.js" async="async" mobile="true"></script><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.css" media="print" onload="this.media='all'"><script src="https://cdn.jsdelivr.net/npm/aplayer/dist/APlayer.min.js"></script><script src="https://jsd.onmicrosoft.cn/npm/js-heo@1.0.12/metingjs/Meting.min.js"></script><script src="/"></script><script>let pjaxSelectors = [
+  'title',
+  '#config-diff',
+  '#body-wrap',
+  '#rightside-config-hide',
+  '#rightside-config-show',
+  '#web_bg',
+  '.js-pjax'
+]
+
+var pjax = new Pjax({
+  elements: 'a:not([target="_blank"]):not([href="/music/"]):not([href="/no-pjax/"])',
+  selectors: pjaxSelectors,
+  cacheBust: false,
+  analytics: false,
+  scrollRestoration: false
+})
+
+document.addEventListener('pjax:send', function () {
+
+  // removeEventListener
+  btf.removeGlobalFnEvent('pjax')
+  btf.removeGlobalFnEvent('themeChange')
+
+  document.getElementById('rightside').classList.remove('rightside-show')
+  
+  if (window.aplayers) {
+    for (let i = 0; i < window.aplayers.length; i++) {
+      if (!window.aplayers[i].options.fixed) {
+        window.aplayers[i].destroy()
+      }
+    }
+  }
+
+  typeof typed === 'object' && typed.destroy()
+
+  //reset readmode
+  const $bodyClassList = document.body.classList
+  $bodyClassList.contains('read-mode') && $bodyClassList.remove('read-mode')
+
+  typeof disqusjs === 'object' && disqusjs.destroy()
+})
+
+document.addEventListener('pjax:complete', function () {
+  window.refreshFn()
+
+  document.querySelectorAll('script[data-pjax]').forEach(item => {
+    const newScript = document.createElement('script')
+    const content = item.text || item.textContent || item.innerHTML || ""
+    Array.from(item.attributes).forEach(attr => newScript.setAttribute(attr.name, attr.value))
+    newScript.appendChild(document.createTextNode(content))
+    item.parentNode.replaceChild(newScript, item)
+  })
+
+  GLOBAL_CONFIG.islazyload && window.lazyLoadInstance.update()
+
+  typeof panguInit === 'function' && panguInit()
+
+  // google analytics
+  typeof gtag === 'function' && gtag('config', '', {'page_path': window.location.pathname});
+
+  // baidu analytics
+  typeof _hmt === 'object' && _hmt.push(['_trackPageview',window.location.pathname]);
+
+  typeof loadMeting === 'function' && document.getElementsByClassName('aplayer').length && loadMeting()
+
+  // prismjs
+  typeof Prism === 'object' && Prism.highlightAll()
+})
+
+document.addEventListener('pjax:error', e => {
+  if (e.request.status === 404) {
+    pjax.loadUrl('/404.html')
+  }
+})</script><script async data-pjax src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><div id="local-search"><div class="search-dialog"><nav class="search-nav"><span class="search-dialog-title">搜索</span><span id="loading-status"></span><button class="search-close-button"><i class="fas fa-times"></i></button></nav><div class="is-center" id="loading-database"><i class="fas fa-spinner fa-pulse"></i><span>  数据库加载中</span></div><div class="search-wrap"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章" type="text"/></div></div><hr/><div id="local-search-results"></div><div id="local-search-stats-wrap"></div></div></div><div id="search-mask"></div><script src="/js/search/local-search.js"></script></div></div><!-- hexo injector body_end start --><script data-pjax>
+  function butterfly_footer_beautify_injector_config(){
+    var parent_div_git = document.getElementById('footer-wrap');
+    var item_html = '<div id="workboard"></div><p id="ghbdages"><a class="github-badge" target="_blank" href="https://hexo.io/" style="margin-inline:5px" data-title="博客框架为Hexo_v6.2.0" title=""><img src="https://img.shields.io/badge/Frame-Hexo-blue?style=flat&amp;logo=hexo" alt=""/></a><a class="github-badge" target="_blank" href="https://butterfly.js.org/" style="margin-inline:5px" data-title="主题版本Butterfly_v4.3.1" title=""><img src="https://img.shields.io/badge/Theme-Butterfly-6513df?style=flat&amp;logo=bitdefender" alt=""/></a><a class="github-badge" target="_blank" href="https://vercel.com/" style="margin-inline:5px" data-title="本站采用多线部署，主线路托管于Vercel" title=""><img src="https://img.shields.io/badge/Hosted-Vercel-brightgreen?style=flat&amp;logo=Vercel" alt=""/></a><a class="github-badge" target="_blank" href="https://dashboard.4everland.org/" style="margin-inline:5px" data-title="本站采用多线部署，备用线路托管于4EVERLAND" title=""><img src="https://img.shields.io/badge/Hosted-4EVERLAND-22DDDD?style=flat&amp;logo=IPFS" alt=""/></a><a class="github-badge" target="_blank" href="https://github.com/" style="margin-inline:5px" data-title="本站项目由Github托管" title=""><img src="https://img.shields.io/badge/Source-Github-d021d6?style=flat&amp;logo=GitHub" alt=""/></a><a class="github-badge" target="_blank" href="http://creativecommons.org/licenses/by-nc-sa/4.0/" style="margin-inline:5px" data-title="本站采用知识共享署名-非商业性使用-相同方式共享4.0国际许可协议进行许可" title=""><img src="https://img.shields.io/badge/Copyright-BY--NC--SA%204.0-d42328?style=flat&amp;logo=Claris" alt=""/></a></p>';
+    console.log('已挂载butterfly_footer_beautify')
+    parent_div_git.insertAdjacentHTML("beforeend",item_html)
+    }
+  var elist = 'null'.split(',');
+  var cpage = location.pathname;
+  var epage = 'all';
+  var flag = 0;
+
+  for (var i=0;i<elist.length;i++){
+    if (cpage.includes(elist[i])){
+      flag++;
+    }
+  }
+
+  if ((epage ==='all')&&(flag == 0)){
+    butterfly_footer_beautify_injector_config();
+  }
+  else if (epage === cpage){
+    butterfly_footer_beautify_injector_config();
+  }
+  </script><script async src="https://npm.elemecdn.com/hexo-butterfly-footer-beautify@1.0.0/lib/runtime.js"></script><!-- hexo injector body_end end --></body></html>
